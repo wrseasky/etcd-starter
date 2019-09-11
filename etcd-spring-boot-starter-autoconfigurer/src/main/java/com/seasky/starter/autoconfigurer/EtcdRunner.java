@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class EtcdRunner implements ApplicationRunner {
@@ -38,17 +39,19 @@ public class EtcdRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        byte[] bytes = etcdInstance.getEtcdKey(etcdProperties.getWatchPoint()).getValue().getBytes();
-        setPropertiesByInvoke(bytes);
+        List<KeyValue> etcdKeyWithPrefix = etcdInstance.getEtcdKeyWithPrefix(etcdProperties.getWatchPoint());
+        for (KeyValue keyWithPrefix : etcdKeyWithPrefix) {
+            byte[] bytes = keyWithPrefix.getValue().getBytes();
+            ProperUtils.load("properties", bytes);
+        }
+        setPropertiesByInvoke();
         watch();
     }
 
     /**
      * 将从etcd获取的值载入,并将值设置到对应类的Field
-     * @param bytes
      */
-    public void setPropertiesByInvoke(byte[] bytes) {
-        ProperUtils.loadPropertiesValue(bytes);
+    public void setPropertiesByInvoke() {
         try {
             Collection<Object> beansWithAnnotation = getBeansWithAnnotation();
             for (Object bean : beansWithAnnotation) {
@@ -79,13 +82,14 @@ public class EtcdRunner implements ApplicationRunner {
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * 获取指定注解的所有类
+     *
      * @return
      */
     public Collection<Object> getBeansWithAnnotation() {
@@ -101,7 +105,8 @@ public class EtcdRunner implements ApplicationRunner {
         Watch.Listener listener = Watch.listener(response -> {
             for (WatchEvent event : response.getEvents()) {
                 byte[] bytes = event.getKeyValue().getValue().getBytes();
-                setPropertiesByInvoke(bytes);
+                ProperUtils.load("properties", bytes);
+                setPropertiesByInvoke();
             }
         });
 

@@ -2,6 +2,8 @@ package com.seasky.starter.autoconfigurer;
 
 
 import org.springframework.beans.factory.config.YamlMapFactoryBean;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,9 +16,17 @@ import java.util.Properties;
 
 public class ProperUtils {
 
-    static Map<String, String> values = new HashMap<String, String>();
+    private static Map<String, String> values = new HashMap<String, String>();
 
-    public static void loadPropertiesValue(byte[] bytes) {
+    public static void load(String type, byte[] bytes){
+        if("properties".equals(type)){
+            loadPropertiesValue(bytes);
+        }else if("yaml".equals(type)){
+            loadYamlValue(bytes);
+        }
+    }
+
+    private static void loadPropertiesValue(byte[] bytes) {
         try {
             ByteArrayInputStream bai = new ByteArrayInputStream(bytes);
             Properties properties = new Properties();
@@ -28,10 +38,11 @@ public class ProperUtils {
         }
     }
 
-    public static void loadYamlValue(byte[] bytes) {
-        Yaml yaml = new Yaml();
-        ByteArrayInputStream bai = new ByteArrayInputStream(bytes);
-        Map<String, String> map = (Map<String, String>) yaml.load(bai);
+    private static void loadYamlValue(byte[] bytes) {
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(new ByteArrayResource(bytes));
+        Map map = (Map)yaml.getObject();
+        assert map != null;
         values.putAll(map);
     }
 
