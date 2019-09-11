@@ -43,6 +43,10 @@ public class EtcdRunner implements ApplicationRunner {
         watch();
     }
 
+    /**
+     * 将从etcd获取的值载入,并将值设置到对应类的Field
+     * @param bytes
+     */
     public void setPropertiesByInvoke(byte[] bytes) {
         ProperUtils.loadPropertiesValue(bytes);
         try {
@@ -80,11 +84,18 @@ public class EtcdRunner implements ApplicationRunner {
         }
     }
 
+    /**
+     * 获取指定注解的所有类
+     * @return
+     */
     public Collection<Object> getBeansWithAnnotation() {
         Map<String, Object> beanWhithAnnotation = applicationContext.getBeansWithAnnotation(EtcdConfig.class);
         return beanWhithAnnotation.values();
     }
 
+    /**
+     * 监控
+     */
     public void watch() {
         ByteSequence key = ByteSequence.from(etcdProperties.getWatchPoint(), Charset.defaultCharset());
         Watch.Listener listener = Watch.listener(response -> {
@@ -105,9 +116,4 @@ public class EtcdRunner implements ApplicationRunner {
             e.printStackTrace();
         }
     }
-
-    //项目启动 根据监控的地址 抓取数据  放入properties中 初始化
-    //监控节点改变后,
-
-
 }
