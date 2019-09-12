@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "spring.etcd.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Description for spring.etcd.enabled."
+    },
+    {
+      "name": "spring.etcd.url",
+      "type": "java.lang.String",
+      "description": "Description for spring.etcd.url."
+    },
+    {
+      "name": "spring.etcd.port",
+      "type": "java.lang.String",
+      "description": "Description for spring.etcd.port."
+    },
+    {
+      "name": "spring.etcd.watchPoint",
+      "type": "java.lang.String",
+      "description": "Description for spring.etcd.watchPoint."
+    }
+  ]
+}
