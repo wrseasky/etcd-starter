@@ -1,0 +1,7 @@
+
+spring:
+   etcd:
+      enabled : true
+      url : 127.0.0.1
+      port : 2379
+      watchPoint : /etcd/etcd/etcd/
