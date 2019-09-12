@@ -9,9 +9,11 @@ import io.etcd.jetcd.KeyValue;
 import io.etcd.jetcd.Watch;
 import io.etcd.jetcd.options.WatchOption;
 import io.etcd.jetcd.watch.WatchEvent;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
@@ -23,7 +25,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+
 public class EtcdRunner implements ApplicationRunner {
+
+    private static final Logger logger = LoggerFactory.getLogger(EtcdRunner.class);
 
     private EtcdProperties etcdProperties;
     private ApplicationContext applicationContext;
@@ -39,10 +45,14 @@ public class EtcdRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        logger.info("run方法被调用,参数:{} ", args);
         List<KeyValue> etcdKeyWithPrefix = etcdInstance.getEtcdKeyWithPrefix(etcdProperties.getWatchPoint());
         for (KeyValue keyWithPrefix : etcdKeyWithPrefix) {
+            String keyName = new String(keyWithPrefix.getKey().getBytes());
+            String fileType = keyName.substring(keyName.lastIndexOf(".") + 1);
+
             byte[] bytes = keyWithPrefix.getValue().getBytes();
-            ProperUtils.load("properties", bytes);
+            ProperUtils.load(fileType, bytes);
         }
         setPropertiesByInvoke();
         watch();
@@ -78,7 +88,8 @@ public class EtcdRunner implements ApplicationRunner {
                         String replace = name.substring(0, 1).toUpperCase() + name.substring(1);
                         Method method = aClass.getMethod("set" + replace, type);
                         //否则，通过成员变量的实际类型对应的class利用反射机制，调用其valueOf()方法，将属性文件中的字符串强制转换成需要传入的形参类型，并执行该方法为该成员变量赋值
-                        method.invoke(bean, type.getDeclaredMethod("valueOf", java.lang.String.class).invoke(declaredField, realValue));
+                        Method valueOf = type.getDeclaredMethod("valueOf", String.class);
+                        method.invoke(bean, valueOf.invoke(declaredField, realValue));
                     }
                 }
             }
@@ -104,8 +115,10 @@ public class EtcdRunner implements ApplicationRunner {
         ByteSequence key = ByteSequence.from(etcdProperties.getWatchPoint(), Charset.defaultCharset());
         Watch.Listener listener = Watch.listener(response -> {
             for (WatchEvent event : response.getEvents()) {
-                byte[] bytes = event.getKeyValue().getValue().getBytes();
-                ProperUtils.load("properties", bytes);
+                KeyValue keyValue = event.getKeyValue();
+                String keyName = new String(keyValue.getKey().getBytes());
+                String fileType = keyName.substring(keyName.lastIndexOf(".") + 1);
+                ProperUtils.load(fileType, keyValue.getValue().getBytes());
                 setPropertiesByInvoke();
             }
         });

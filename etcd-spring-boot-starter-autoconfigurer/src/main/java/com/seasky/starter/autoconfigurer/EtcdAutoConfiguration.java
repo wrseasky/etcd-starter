@@ -22,7 +22,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 @Configuration
 @ConditionalOnClass({Client.class})
 @EnableConfigurationProperties(EtcdProperties.class)
-@ConditionalOnProperty(prefix = "spring.etcd", name = "enabled", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "spring.etcd", name = "enabled")
 public class EtcdAutoConfiguration {
 
 
@@ -48,6 +48,7 @@ public class EtcdAutoConfiguration {
 
     @Bean
     public EtcdRunner etcdRunner(EtcdInstance etcdInstance) {
+        System.out.println("aaaaaaaaaaaa");
         return new EtcdRunner(etcdProperties, context, environment, etcdInstance);
     }
 
