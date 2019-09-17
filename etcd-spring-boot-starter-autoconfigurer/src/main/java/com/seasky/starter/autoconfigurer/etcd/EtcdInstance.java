@@ -33,6 +33,10 @@ public class EtcdInstance {
         return ruleList;
     }
 
+    public void delEtcdByKey(String sourceKey){
+        client.getKVClient().delete(ByteSequence.from(sourceKey.getBytes()));
+    }
+
     public KeyValue getEtcdKey(String sourceKey) {
         ByteSequence key = ByteSequence.from(sourceKey.getBytes());
         List<KeyValue> ruleList = null;

@@ -74,7 +74,7 @@
 						<div class="form-group">
 							<label>projectName</label>
 							<select class="form-control" name="projectName">
-								<option th:value="${projectName}" th:text="${projectName}">1</option>
+								<option th:selected="${projectName!=null}?${projectName == project}" th:value="${project}" th:each="project:${projectNames}" th:text="${project}">1</option>
 							</select>
 						</div>
 						<button type="submit" class="btn btn-primary" th:text="${etcdValue!=null}?'修改':'添加'">添加</button>

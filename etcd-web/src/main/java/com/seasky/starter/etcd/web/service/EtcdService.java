@@ -34,9 +34,9 @@ public class EtcdService {
         }
     }
 
-    public Map<String,String> getEtcdValues(String projectName){
+    public Map<String, String> getEtcdValues(String projectName) {
         List<KeyValue> etcdKeyWithPrefix = etcdInstance.getEtcdKeyWithPrefix(projectName);
-        Map<String,String> map = new HashMap<>(etcdKeyWithPrefix.size());
+        Map<String, String> map = new HashMap<>(etcdKeyWithPrefix.size());
         for (KeyValue keyWithPrefix : etcdKeyWithPrefix) {
             String key = new String(keyWithPrefix.getKey().getBytes());
             key = key.substring(key.lastIndexOf("/") + 1);
@@ -46,16 +46,26 @@ public class EtcdService {
         return map;
     }
 
-    public Map<String,String> getEtcdValue(String projectName,String sourceKey){
+    public Map<String, String> getEtcdValue(String projectName, String sourceKey) {
         KeyValue etcdKey = etcdInstance.getEtcdKey(projectName + "/" + sourceKey);
-        Map<String,String> map = new HashMap<>(1);
+        Map<String, String> map = new HashMap<>(1);
         String key = new String(etcdKey.getKey().getBytes());
         key = key.substring(key.lastIndexOf("/") + 1);
         String value = new String(etcdKey.getValue().getBytes());
         map.put(key, value);
         return map;
     }
-    public void addEtcdValue(String projectName,String etcdKey, String etcdValue){
+
+
+    public void addEtcdValue(String projectName, String etcdKey, String etcdValue) {
         etcdInstance.putEtcdSource(projectName + "/" + etcdKey, etcdValue);
+    }
+
+    public void delEtcdValue(String projectName, String etcdKey) {
+        etcdInstance.delEtcdByKey(projectName + "/" + etcdKey);
+    }
+
+    public List<String> getProjectNames(){
+        return Arrays.asList("springBootWeb","springBootService","springBootDao");
     }
 }

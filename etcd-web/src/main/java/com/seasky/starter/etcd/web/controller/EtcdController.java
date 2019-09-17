@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -30,7 +31,14 @@ public class EtcdController {
         return "redirect:/etcd/list";
     }
 
-    @GetMapping("/list/{projectName}")
+    @GetMapping("/listProject")
+    public String toListPage(Model model) {
+        List<String> projectNames = etcdService.getProjectNames();
+        model.addAttribute("projectNames",projectNames);
+        return "etcd/listProject";
+    }
+
+    @GetMapping("/etcd/{projectName}")
     public String index(@PathVariable("projectName") String projectName, Model model) {
         Map<String, String> etcdValus = etcdService.getEtcdValues(projectName);
         model.addAttribute("etcdValues", etcdValus);
@@ -38,17 +46,27 @@ public class EtcdController {
         return "etcd/list";
     }
 
+    @GetMapping("/etcd")
+    public String toAddPage(Model model) {
+        List<String> projectNames = etcdService.getProjectNames();
+        model.addAttribute("projectNames",projectNames);
+        return "etcd/edit";
+    }
+
     @GetMapping("/etcd/{projectName}/{key}")
-    public String edit(@PathVariable("projectName") String projectName, @PathVariable("key") String key, Model model) {
+    public String toEditPage(@PathVariable("projectName") String projectName, @PathVariable("key") String key, Model model) {
         Map<String, String> etcdValue = etcdService.getEtcdValue(projectName, key);
         model.addAttribute("projectName", projectName);
         model.addAttribute("etcdKey", key);
         model.addAttribute("etcdValue", etcdValue.get(key));
+
+        List<String> projectNames = etcdService.getProjectNames();
+        model.addAttribute("projectNames",projectNames);
         return "etcd/edit";
     }
 
     /**
-     * 添加
+     * 添加 修改
      * @param projectName
      * @param etcdKey
      * @param etcdValue
@@ -57,21 +75,15 @@ public class EtcdController {
     @PostMapping("/add")
     public String addEtcdValue(String projectName, String etcdKey, String etcdValue) {
         etcdService.addEtcdValue(projectName, etcdKey, etcdValue);
-        return "redirect:/list/" + projectName;
+        return "redirect:/etcd/" + projectName;
     }
 
-/*    @PutMapping("/add")
-    public String updateEtcdValue(String projectName, String etcdKey, String etcdValue) {
-        etcdService.addEtcdValue(projectName, etcdKey, etcdValue);
-        return "redirect:/list/" + projectName;
-    }*/
 
     @DeleteMapping("/etcd/{projectName}/{key}")
     public String delete(@PathVariable("projectName") String projectName, @PathVariable("key") String key, Model model) {
-        Map<String, String> etcdValue = etcdService.getEtcdValue(projectName, key);
-        model.addAttribute("projectName", projectName);
-        model.addAttribute("etcdKey", key);
-        model.addAttribute("etcdValue", etcdValue.get(key));
-        return "redirect:/emps";
+        etcdService.delEtcdValue(projectName, key);
+        return "redirect:/etcd/" + projectName;
     }
+
+
 }

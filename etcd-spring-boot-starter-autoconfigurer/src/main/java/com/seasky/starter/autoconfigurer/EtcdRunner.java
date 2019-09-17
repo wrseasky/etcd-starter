@@ -101,6 +101,8 @@ public class EtcdRunner implements ApplicationRunner {
             for (WatchEvent event : response.getEvents()) {
                 KeyValue keyValue = event.getKeyValue();
                 String keyName = new String(keyValue.getKey().getBytes());
+                String value = new String(keyValue.getValue().getBytes());
+                
                 String fileType = keyName.substring(keyName.lastIndexOf(".") + 1);
                 ProperUtils.load(fileType, keyValue.getValue().getBytes());
                 setPropertiesByInvoke();

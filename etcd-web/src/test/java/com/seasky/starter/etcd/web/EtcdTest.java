@@ -5,12 +5,14 @@ import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
 import io.etcd.jetcd.KV;
 import io.etcd.jetcd.KeyValue;
+import io.etcd.jetcd.kv.PutResponse;
 import io.etcd.jetcd.options.GetOption;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class EtcdTest {
@@ -33,12 +35,22 @@ public class EtcdTest {
         System.out.println(new String(etcdKey.getKey().getBytes()));
     }
 
+    @Test
+    public void delValue(){
+        KeyValue etcdKey = getEtcdKey("springBootWeb/aaa");
+        System.out.println(new String(etcdKey.getKey().getBytes()));
+    }
+
 
     @Test
-    public void put(){
+    public void put()throws Exception{
         putEtcdSource("springBootWeb/aaa","bbb");
     }
 
+    public void delEtcdKeyByKey(String sourceKey) {
+        ByteSequence key = ByteSequence.from(sourceKey.getBytes());
+        client.getKVClient().delete(key);
+    }
 
 
     public List<KeyValue> getEtcdKeyWithPrefix(String sourceKey) {
@@ -64,9 +76,13 @@ public class EtcdTest {
         return ruleList.get(0);
     }
 
-    public void putEtcdSource(String sourceKey, String sourceValue) {
+    public void putEtcdSource(String sourceKey, String sourceValue) throws Exception{
         ByteSequence key = ByteSequence.from(sourceKey, Charset.defaultCharset());
         KV kvClient = client.getKVClient();
-        kvClient.put(key, ByteSequence.from(sourceValue.getBytes()));
+        CompletableFuture<PutResponse> put = kvClient.put(key, ByteSequence.from(sourceValue.getBytes()));
+        Thread.sleep(3000);
+        PutResponse putResponse = put.get();
+        boolean done = put.isDone();
+        System.out.println(done);
     }
 }
