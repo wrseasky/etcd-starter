@@ -1,15 +1,11 @@
 package com.seasky.starter.autoconfigurer.etcd;
 
 
-import com.seasky.starter.autoconfigurer.EtcdProperties;
 import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
+import io.etcd.jetcd.KV;
 import io.etcd.jetcd.KeyValue;
-import io.etcd.jetcd.Watch;
 import io.etcd.jetcd.options.GetOption;
-import io.etcd.jetcd.options.WatchOption;
-import io.etcd.jetcd.watch.WatchEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -17,14 +13,12 @@ import java.util.concurrent.ExecutionException;
 
 public class EtcdInstance {
     private Client client;
-    private EtcdProperties etcdProperties;
 
-    public EtcdInstance(Client client, EtcdProperties etcdProperties) {
+    public EtcdInstance(Client client) {
         this.client = client;
-        this.etcdProperties = etcdProperties;
     }
 
-    public Client Client(){
+    public Client getClient() {
         return client;
     }
 
@@ -36,11 +30,6 @@ public class EtcdInstance {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-//        for (KeyValue kv : ruleList) {
-//            System.out.println(new String(kv.getKey().getBytes()));
-//            System.out.println(new String(kv.getValue().getBytes()));
-//        }
-//        client.close();
         return ruleList;
     }
 
@@ -54,6 +43,12 @@ public class EtcdInstance {
         }
 
        return ruleList.get(0);
+    }
+
+    public void putEtcdSource(String sourceKey, String sourceValue){
+        ByteSequence key = ByteSequence.from(sourceKey, Charset.defaultCharset());
+        KV kvClient = client.getKVClient();
+        kvClient.put(key, ByteSequence.from(sourceValue.getBytes()));
     }
 
     public static void main(String[] args) {

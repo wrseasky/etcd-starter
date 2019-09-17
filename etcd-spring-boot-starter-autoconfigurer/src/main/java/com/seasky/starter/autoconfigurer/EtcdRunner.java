@@ -4,16 +4,14 @@ import com.seasky.starter.autoconfigurer.annnotation.EtcdConfig;
 import com.seasky.starter.autoconfigurer.annnotation.EtcdValue;
 import com.seasky.starter.autoconfigurer.etcd.EtcdInstance;
 import io.etcd.jetcd.ByteSequence;
-import io.etcd.jetcd.Client;
 import io.etcd.jetcd.KeyValue;
 import io.etcd.jetcd.Watch;
 import io.etcd.jetcd.options.WatchOption;
 import io.etcd.jetcd.watch.WatchEvent;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.BeanFactory;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
@@ -22,10 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-
-import org.slf4j.LoggerFactory;
 
 public class EtcdRunner implements ApplicationRunner {
 
@@ -33,27 +28,16 @@ public class EtcdRunner implements ApplicationRunner {
 
     private EtcdProperties etcdProperties;
     private ApplicationContext applicationContext;
-    private ConfigurableEnvironment environment;
     private EtcdInstance etcdInstance;
 
     public EtcdRunner(EtcdProperties etcdProperties, ApplicationContext applicationContext, ConfigurableEnvironment environment, EtcdInstance etcdInstance) {
         this.etcdProperties = etcdProperties;
         this.applicationContext = applicationContext;
-        this.environment = environment;
         this.etcdInstance = etcdInstance;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        logger.info("run方法被调用,参数:{} ", args);
-        List<KeyValue> etcdKeyWithPrefix = etcdInstance.getEtcdKeyWithPrefix(etcdProperties.getWatchPoint());
-        for (KeyValue keyWithPrefix : etcdKeyWithPrefix) {
-            String keyName = new String(keyWithPrefix.getKey().getBytes());
-            String fileType = keyName.substring(keyName.lastIndexOf(".") + 1);
-
-            byte[] bytes = keyWithPrefix.getValue().getBytes();
-            ProperUtils.load(fileType, bytes);
-        }
         setPropertiesByInvoke();
         watch();
     }
@@ -124,7 +108,7 @@ public class EtcdRunner implements ApplicationRunner {
         });
 
         try {
-            Watch watch = etcdInstance.Client().getWatchClient();
+            Watch watch = etcdInstance.getClient().getWatchClient();
             WatchOption option = WatchOption.newBuilder().withPrefix(key).withPrevKV(true).build();
             Watch.Watcher watcher = watch.watch(key, option, listener);
             synchronized (watcher) {

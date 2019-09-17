@@ -13,10 +13,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class ProperUtils {
 
     private static Map<String, String> values = new HashMap<String, String>();
+
+    private static Properties properties = new Properties();
 
     public static void load(String type, byte[] bytes){
         if("properties".equals(type)){
@@ -26,28 +29,60 @@ public class ProperUtils {
         }
     }
 
+    public static Properties getProperties(String type, byte[] bytes){
+        if("properties".equals(type)){
+            return getPropertiesByPro(bytes);
+        }else if("yaml".equals(type)){
+            return getPropertiesByYaml(bytes);
+        }
+        return  null;
+    }
+
     private static void loadPropertiesValue(byte[] bytes) {
         try {
             ByteArrayInputStream bai = new ByteArrayInputStream(bytes);
-            Properties properties = new Properties();
-            properties.load(bai);
+            Properties proper = new Properties();
+            proper.load(bai);
             bai.close();
-            values.putAll((Map) properties);
+            properties.putAll(proper);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private static Properties getPropertiesByPro(byte[] bytes) {
+        try {
+            ByteArrayInputStream bai = new ByteArrayInputStream(bytes);
+            Properties proper = new Properties();
+            proper.load(bai);
+            bai.close();
+            return proper;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Properties getPropertiesByYaml(byte[] bytes) {
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(new ByteArrayResource(bytes));
+        return yaml.getObject();
+    }
+
+
     private static void loadYamlValue(byte[] bytes) {
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         yaml.setResources(new ByteArrayResource(bytes));
-        Map map = (Map)yaml.getObject();
-        assert map != null;
-        values.putAll(map);
+        Properties proper = yaml.getObject();
+        properties.putAll(proper);
     }
 
     public static String getValue(String key) {
-        return String.valueOf(values.get(key));
+        return String.valueOf(properties.get(key));
+    }
+
+    public static Properties getValues(){
+        return properties;
     }
 
 }
