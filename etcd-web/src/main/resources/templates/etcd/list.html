@@ -70,8 +70,8 @@
 									<td th:text="${etcd.key}"></td>
 									<td th:text="${etcd.value}"></td>
 									<td>
-										<a class="btn btn-sm btn-primary" th:href="@{/edit/}+${projectName}+'/'+${etcd.key}">编辑</a>
-										<button th:attr="del_uri=@{/delete/}+${projectName}+'/'+${etcd.key}" class="btn btn-sm btn-danger deleteBtn">删除</button>
+										<a class="btn btn-sm btn-primary" th:href="@{/etcd/}+${projectName}+'/'+${etcd.key}">编辑</a>
+										<button th:attr="del_uri=@{/etcd/}+${projectName}+'/'+${etcd.key}" class="btn btn-sm btn-danger deleteBtn">删除</button>
 									</td>
 								</tr>
 							</tbody>

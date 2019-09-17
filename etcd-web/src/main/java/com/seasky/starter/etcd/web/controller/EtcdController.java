@@ -38,7 +38,7 @@ public class EtcdController {
         return "etcd/list";
     }
 
-    @GetMapping("/edit/{projectName}/{key}")
+    @GetMapping("/etcd/{projectName}/{key}")
     public String edit(@PathVariable("projectName") String projectName, @PathVariable("key") String key, Model model) {
         Map<String, String> etcdValue = etcdService.getEtcdValue(projectName, key);
         model.addAttribute("projectName", projectName);
@@ -65,4 +65,13 @@ public class EtcdController {
         etcdService.addEtcdValue(projectName, etcdKey, etcdValue);
         return "redirect:/list/" + projectName;
     }*/
+
+    @DeleteMapping("/etcd/{projectName}/{key}")
+    public String delete(@PathVariable("projectName") String projectName, @PathVariable("key") String key, Model model) {
+        Map<String, String> etcdValue = etcdService.getEtcdValue(projectName, key);
+        model.addAttribute("projectName", projectName);
+        model.addAttribute("etcdKey", key);
+        model.addAttribute("etcdValue", etcdValue.get(key));
+        return "redirect:/emps";
+    }
 }
