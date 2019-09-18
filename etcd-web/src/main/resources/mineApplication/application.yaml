@@ -1,33 +1,13 @@
 spring:
-#  datasource:
-#    username: root
-#    password: root
-#    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-  etcd:
-    enabled : true
-    url : 127.0.0.1
-    port : 2379
-    watchPoint : /etcd/etcd/etcd/aaa/application.yaml
-
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
 server:
-  port: 9999
+  port: 6666
+com:
+  baidu:
+    name: 中国加油
+    age: 16
 
-#debug: true
-#
-#com:
-#  baidu:
-#    name: 中国加油
-#    age: 16
-
-
-
-      #com.baidu.name = 中国加油
-      #
-      #com.baidu.age = 16
-      #
-      #spring.etcd.enabled = true
-      #
-      #spring.etcd.url = 127.0.0.1
-      #spring.etcd.port = 2379
-      #spring.etcd.watchPoint = /etcd

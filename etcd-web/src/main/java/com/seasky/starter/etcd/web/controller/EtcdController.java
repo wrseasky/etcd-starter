@@ -15,20 +15,20 @@ public class EtcdController {
     @Autowired
     private EtcdService etcdService;
 
-    @RequestMapping("/file")
-    public String add(Model model) {
-        // thymeleaf默认就会拼串
-        // classpath:/templates/xxxx.html
-        return "etcd/add";
+    @RequestMapping("/toUpload")
+    public String toUploadPage(Model model) {
+        List<String> projectNames = etcdService.getProjectNames();
+        model.addAttribute("projectNames",projectNames);
+        return "etcd/upload";
     }
 
     @RequestMapping("/upload")
-    public String addEtcdValues(@RequestParam("file") MultipartFile file, @RequestParam("projectName") String projectName) {
+    public String uploadEtcdFile(@RequestParam("file") MultipartFile file, @RequestParam("projectName") String projectName) {
         if (file.isEmpty()) {
             return "上传失败，请选择文件";
         }
         etcdService.uploadEtcd(file, projectName);
-        return "redirect:/etcd/list";
+        return "redirect:/etcd/" + projectName;
     }
 
     @GetMapping("/listProject")
@@ -43,7 +43,7 @@ public class EtcdController {
         Map<String, String> etcdValus = etcdService.getEtcdValues(projectName);
         model.addAttribute("etcdValues", etcdValus);
         model.addAttribute("projectName", projectName);
-        return "etcd/list";
+        return "etcd/listEtcd";
     }
 
     @GetMapping("/etcd")

@@ -11,6 +11,7 @@ import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertiesPropertySource;
 
 import java.util.List;
+import java.util.Properties;
 
 public class MineBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
@@ -28,13 +29,15 @@ public class MineBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
         List<KeyValue> etcdKeyWithPrefix = etcdInstance.getEtcdKeyWithPrefix(watchPoint);
         for (KeyValue keyWithPrefix : etcdKeyWithPrefix) {
-            String keyName = new String(keyWithPrefix.getKey().getBytes());
-            String fileType = keyName.substring(keyName.lastIndexOf(".") + 1);
-
-            byte[] bytes = keyWithPrefix.getValue().getBytes();
-            ProperUtils.load(fileType, bytes);
+            String wholeKeyName = new String(keyWithPrefix.getKey().getBytes());
+            String shortKeyName = wholeKeyName.substring(wholeKeyName.lastIndexOf("/") + 1);
+            String shortValue = new String(keyWithPrefix.getValue().getBytes());
+            ProperUtils.putValue(shortKeyName, shortValue);
         }
-        MutablePropertySources mps = environment.getPropertySources();
-        mps.addFirst(new PropertiesPropertySource("defaultProperties", ProperUtils.getValues()));
+        Properties values = ProperUtils.getValues();
+        if(values.size() >0){
+            MutablePropertySources mps = environment.getPropertySources();
+            mps.addFirst(new PropertiesPropertySource("defaultProperties", values));
+        }
     }
 }

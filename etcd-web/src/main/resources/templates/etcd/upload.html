@@ -50,34 +50,21 @@
 		<div class="container-fluid">
 			<div class="row">
 				<!--引入侧边栏-->
-				<div th:replace="commons/bar::#sidebar(activeUri='emps')"></div>
+				<div th:replace="commons/bar::#sidebar(activeUri='listProject.html')"></div>
 
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-					<!--需要区分是员工修改还是添加；-->
-					<form th:action="@{/add}" method="post">
-						<!--发送put请求修改员工数据-->
-						<!--
-						1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置好的）
-						2、页面创建一个post表单
-						3、创建一个input项，name="_method";值就是我们指定的请求方式
-						-->
-						<!--<input type="hidden" name="_method" value="put" th:if="${etcdValue!=null}"/>-->
-						<!--<input type="hidden" name="projectName" th:if="${projectName!=null}" th:value="${projectName}">-->
+					<form th:action="@{/upload}" method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<label>key</label>
-							<input name="etcdKey" type="text" class="form-control" placeholder="spring.thymeleaf.cache" th:value="${etcdKey!=null}?${etcdKey}">
+							<label>选择properties或者yaml文件</label>
+							<input name="file" type="file" id="fileInput" class="form-control">
 						</div>
 						<div class="form-group">
-							<label>value</label>
-							<input name="etcdValue" type="text" class="form-control" th:value="${etcdValue!=null}?${etcdValue}">
-						</div>
-						<div class="form-group">
-							<label>projectName</label>
+							<label>ProjectName</label>
 							<select class="form-control" name="projectName">
-								<option th:selected="${projectName!=null}?${projectName == project}" th:value="${project}" th:each="project:${projectNames}" th:text="${project}">1</option>
+								<option th:value="${project}" th:each="project:${projectNames}" th:text="${project}">1</option>
 							</select>
 						</div>
-						<button type="submit" class="btn btn-primary" th:text="${etcdValue!=null}?'修改':'添加'">添加</button>
+						<button type="submit" class="btn btn-primary" id="submitBtn" >上传</button>
 					</form>
 				</main>
 			</div>
@@ -93,7 +80,14 @@
 		<!-- Icons -->
 		<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
 		<script>
-			feather.replace()
+			feather.replace();
+            $("#submitBtn").click(function(){
+                if($("#fileInput").val() == null || $("#fileInput").val() == ""){
+                    alert("上传文件为空")
+                    return false;
+				}
+                return true;
+            });
 		</script>
 
 	</body>

@@ -39,20 +39,8 @@ public class EtcdAutoConfiguration {
         this.environment = environment;
     }
 
-    //    @Bean
-//    public Client client() {
-//        return Client.builder().endpoints("http://" + etcdProperties.getUrl() + ":" + etcdProperties.getPort()).build();
-//    }
-//
-//    @Bean
-////    public EtcdInstance etcdInstance(Client client, EtcdProperties etcdProperties) {
-////        return new EtcdInstance(client, etcdProperties);
-////    }
-
-
     @Bean
     public EtcdRunner etcdRunner(EtcdInstance etcdInstance) {
-        System.out.println("aaaaaaaaaaaa");
         return new EtcdRunner(etcdProperties, context, environment, etcdInstance);
     }
 

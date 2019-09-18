@@ -19,14 +19,12 @@ public class EtcdService {
         try {
             String originalFilename = file.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-            String fileName = originalFilename;
             byte[] bytes = file.getBytes();
             Properties properties = ProperUtils.getProperties(suffix, bytes);
             Set<Map.Entry<Object, Object>> entries = properties.entrySet();
             for (Map.Entry<Object, Object> entry : entries) {
                 String proKey = String.valueOf(entry.getKey());
                 String proValue = String.valueOf(entry.getValue());
-
                 etcdInstance.putEtcdSource(projectName + "/" + proKey, proValue);
             }
         } catch (Exception e) {
@@ -66,6 +64,6 @@ public class EtcdService {
     }
 
     public List<String> getProjectNames(){
-        return Arrays.asList("springBootWeb","springBootService","springBootDao");
+        return Arrays.asList("springBootWeb","springBootService","springBootDao","springWeb","springService","springDao","BootWeb","BootService","BootDao");
     }
 }
