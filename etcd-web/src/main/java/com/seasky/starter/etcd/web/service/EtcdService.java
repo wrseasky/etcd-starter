@@ -1,7 +1,7 @@
 package com.seasky.starter.etcd.web.service;
 
-import com.seasky.starter.autoconfigurer.ProperUtils;
-import com.seasky.starter.autoconfigurer.etcd.EtcdInstance;
+import com.seasky.starter.etcd.web.utils.EtcdInstance;
+import com.seasky.starter.etcd.web.utils.ProperUtils;
 import io.etcd.jetcd.KeyValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

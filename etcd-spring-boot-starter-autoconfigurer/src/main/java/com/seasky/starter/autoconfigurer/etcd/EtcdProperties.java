@@ -1,11 +1,10 @@
-package com.seasky.starter.autoconfigurer;
+package com.seasky.starter.autoconfigurer.etcd;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spring.etcd")
 public class EtcdProperties {
     private String url;
-    private String port;
 
     private String watchPoint;
 
@@ -25,11 +24,4 @@ public class EtcdProperties {
         this.url = url;
     }
 
-    public String getPort() {
-        return port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
 }

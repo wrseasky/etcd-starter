@@ -1,4 +1,4 @@
-package com.seasky.starter.autoconfigurer.etcd;
+package com.seasky.starter.etcd.web.utils;
 
 
 import io.etcd.jetcd.ByteSequence;
@@ -11,9 +11,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * @see https://github.com/etcd-io/jetcd java Api
- */
 public class EtcdInstance {
     private Client client;
 
@@ -56,6 +53,10 @@ public class EtcdInstance {
         ByteSequence key = ByteSequence.from(sourceKey, Charset.defaultCharset());
         KV kvClient = client.getKVClient();
         kvClient.put(key, ByteSequence.from(sourceValue.getBytes()));
+    }
+
+    public static void main(String[] args) {
+//        getOne();
     }
 
 }

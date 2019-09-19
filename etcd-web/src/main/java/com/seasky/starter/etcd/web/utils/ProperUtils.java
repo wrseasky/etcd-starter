@@ -1,4 +1,4 @@
-package com.seasky.starter.autoconfigurer;
+package com.seasky.starter.etcd.web.utils;
 
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
