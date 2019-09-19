@@ -64,6 +64,13 @@ public class EtcdService {
     }
 
     public List<String> getProjectNames(){
-        return Arrays.asList("springBootWeb","springBootService","springBootDao","springWeb","springService","springDao","BootWeb","BootService","BootDao");
+        return Arrays.asList("springBootWeb","springBootService","springBootDao",
+                "springWeb","springService","springDao",
+                "BootWeb","BootService","BootDao",
+                "web","service","dao", "webweb","serviceservice","daodao", "webwebweb","serviceserviceservice","daodaodao", "web4","service4","dao4",
+                "BootBootWeb","BootBootService","BootBootDao","BootBootBootWeb","BootBootBootService","BootBootBootBootDao",
+                "EtcdAutoConfiguration","EtcdConfig","EtcdValue","EtcdInstance","EtcdProperties","EtcdRunner","ProperUtils",
+                "templates","commons","emp","error","etcd","edit.html","listEtcd.html","listProject.html","upload.html","resources","dashboard.html",
+                "login.html","success.html","application.properties","EtcdWebApplicationTests","java");
     }
 }

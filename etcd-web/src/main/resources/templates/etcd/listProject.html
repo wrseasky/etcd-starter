@@ -16,6 +16,10 @@
 		<link href="/asserts/css/dashboard.css"  rel="stylesheet">
 		<style type="text/css">
 			/* Chart.js */
+			.trProject{
+				display: flex;
+				flex-wrap: wrap;
+			}
 			
 			@-webkit-keyframes chartjs-render-animation {
 				from {
@@ -63,7 +67,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr class="trProject">
 									<td th:each="project:${projectNames}">
 										<h2><a class="btn-sm btn-success" href="list/" th:href="@{/etcd/}+${project}">[[${project}]]</a></h2>
 									</td>
