@@ -14,7 +14,7 @@ public class ProperUtils {
     public static Properties getProperties(String type, byte[] bytes) {
         if ("properties".equals(type)) {
             return getPropertiesByPro(bytes);
-        } else if ("yaml".equals(type)) {
+        } else if ("yml".equals(type)) {
             return getPropertiesByYaml(bytes);
         }
         return null;
