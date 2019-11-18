@@ -50,7 +50,7 @@ public class EtcdInstance {
     }
 
     public void putEtcdSource(String sourceKey, String sourceValue){
-        ByteSequence key = ByteSequence.from(sourceKey, Charset.defaultCharset());
+        ByteSequence key = ByteSequence.from(sourceKey, Charset.forName("utf-8"));
         KV kvClient = client.getKVClient();
         kvClient.put(key, ByteSequence.from(sourceValue.getBytes()));
     }

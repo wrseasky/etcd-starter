@@ -1,6 +1,8 @@
 package com.seasky.starter.etcd.web.controller;
 
 import com.seasky.starter.etcd.web.service.EtcdService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,9 @@ import java.util.Map;
 
 @Controller
 public class EtcdController {
+    private static final Logger logger = LoggerFactory.getLogger(EtcdController.class);
+
+
     @Autowired
     private EtcdService etcdService;
 
@@ -72,8 +77,9 @@ public class EtcdController {
      * @param etcdValue
      * @return
      */
-    @PostMapping("/add")
+    @PostMapping(value = "/add", produces="text/plain;charset=UTF-8")
     public String addEtcdValue(String projectName, String etcdKey, String etcdValue) {
+        logger.info("etcdKey:  " + etcdKey + ",  etcdValue:  " + etcdValue);
         etcdService.addEtcdValue(projectName, etcdKey, etcdValue);
         return "redirect:/etcd/" + projectName;
     }

@@ -3,6 +3,8 @@ package com.seasky.starter.etcd.web.service;
 import com.seasky.starter.etcd.web.utils.EtcdInstance;
 import com.seasky.starter.etcd.web.utils.ProperUtils;
 import io.etcd.jetcd.KeyValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,12 +17,16 @@ public class EtcdService {
     @Autowired
     private EtcdInstance etcdInstance;
 
+    private static final Logger logger = LoggerFactory.getLogger(EtcdService.class);
+
+
     public void uploadEtcd(MultipartFile file, String projectName) {
         try {
             String originalFilename = file.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             byte[] bytes = file.getBytes();
             Properties properties = ProperUtils.getProperties(suffix, bytes);
+            logger.info("Properties:  " + properties.toString());
             Set<Map.Entry<Object, Object>> entries = properties.entrySet();
             for (Map.Entry<Object, Object> entry : entries) {
                 String proKey = String.valueOf(entry.getKey());
