@@ -18,8 +18,9 @@ public class MineMvcConfig {
 
                 //不经过controller实现页面跳转
                 registry.addViewController("/index.html").setViewName("login");
-                registry.addViewController("/main.html").setViewName("dashboard");
+                registry.addViewController("/main.html").setViewName("lottery/lotteryList");
                 registry.addViewController("/register.html").setViewName("register");
+                registry.addViewController("/dashboard.html").setViewName("dashboard");
             }
 
             //注册拦截器

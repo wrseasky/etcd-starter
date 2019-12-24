@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seasky.starter.etcd.web.mapper.LotteryMapper">
+
+    <resultMap id="BaseResultMap" type="com.seasky.starter.etcd.web.entity.Lottery">
+        <result column="lId" jdbcType="BIGINT" property="lId"/>
+        <result column="strWinNumber" jdbcType="VARCHAR" property="strWinNumber"/>
+        <result column="dtWinTime" jdbcType="DATE" property="dtWinTime"/>
+        <result column="nRed1" jdbcType="INTEGER" property="nRed1"/>
+        <result column="nRed2" jdbcType="INTEGER" property="nRed2"/>
+        <result column="nRed3" jdbcType="INTEGER" property="nRed3"/>
+        <result column="nRed4" jdbcType="INTEGER" property="nRed4"/>
+        <result column="nRed5" jdbcType="INTEGER" property="nRed5"/>
+        <result column="nRed6" jdbcType="INTEGER" property="nRed6"/>
+        <result column="strReds" jdbcType="VARCHAR" property="strReds"/>
+        <result column="nBlue" jdbcType="INTEGER" property="nBlue"/>
+        <result column="dtCreateTime" jdbcType="DATE" property="dtCreateTime"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+    </resultMap>
+
+    <select id="getlotteryByWinNumber" resultType="com.seasky.starter.etcd.web.entity.Lottery">
+        select * from tblottery where strWinNumber=#{strWinNumber}
+    </select>
+
+    <select id="getlotteryCount" resultType="long">
+        select count(1) from tblottery
+    </select>
+
+    <select id="getlotteries" resultMap="BaseResultMap">
+        select *,sum(cou) score from
+        (
+            select *,CASE WHEN find_in_set(#{nRed1},strReds)>0 then 1  else 0 end cou from tblottery
+            UNION ALL
+            select *,CASE WHEN find_in_set(#{nRed2},strReds)>0 then 1  else 0 end cou from tblottery
+            UNION ALL
+            select *,CASE WHEN find_in_set(#{nRed3},strReds)>0 then 1  else 0 end cou from tblottery
+            UNION ALL
+            select *,CASE WHEN find_in_set(#{nRed4},strReds)>0 then 1  else 0 end cou from tblottery
+            UNION ALL
+            select *,CASE WHEN find_in_set(#{nRed5},strReds)>0 then 1  else 0 end cou from tblottery
+            UNION ALL
+            select *,CASE WHEN find_in_set(#{nRed6},strReds)>0 then 1  else 0 end cou from tblottery
+        ) tt
+        GROUP BY lId ORDER BY score desc ,strWinNumber desc limit 30;
+    </select>
+
+    <insert id="insertLottery" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into tblottery
+        ( strWinNumber,dtWinTime,nRed1,nRed2,nRed3,nRed4,nRed5,nRed6,strReds,nBlue,dtCreateTime)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.strWinNumber},
+            #{item.dtWinTime},
+            #{item.nRed1},
+            #{item.nRed2},
+            #{item.nRed3},
+            #{item.nRed4},
+            #{item.nRed5},
+            #{item.nRed6},
+            #{item.strReds},
+            #{item.nBlue},
+            now()
+            )
+        </foreach>
+    </insert>
+
+</mapper>
