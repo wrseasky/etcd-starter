@@ -98,7 +98,7 @@
                     <tr th:each="lottery:${lotteries}">
                         <td th:text="${lottery.lId}"></td>
                         <td th:text="${lottery.strWinNumber}"></td>
-                        <td th:text="${lottery.strReds}"></td>
+                        <td th:utext="${lottery.strReds}"></td>
                         <td th:text="${lottery.nBlue}"></td>
                         <td th:text="${lottery.score}"></td>
                         <td th:text="${#dates.format(lottery.dtWinTime, 'yyyy-MM-dd')}"></td>

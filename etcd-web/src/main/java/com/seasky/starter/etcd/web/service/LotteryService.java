@@ -91,7 +91,30 @@ public class LotteryService {
         String nRed4 = split[3];
         String nRed5 = split[4];
         String nRed6 = split[5];
-        return lotteryMapper.getlotteries(nRed1, nRed2, nRed3, nRed4, nRed5, nRed6);
+        List<Lottery> lotteries = lotteryMapper.getlotteries(nRed1, nRed2, nRed3, nRed4, nRed5, nRed6);
+        for (Lottery lottery : lotteries) {
+            String strReds = lottery.getStrReds();
+            if (strReds.contains(nRed1)) {
+                strReds = strReds.replace(nRed1, "<font color='red'>" + nRed1 + "</font>");
+            }
+            if (strReds.contains(nRed2)) {
+                strReds = strReds.replace(nRed2, "<font color='red'>" + nRed2 + "</font>");
+            }
+            if (strReds.contains(nRed3)) {
+                strReds = strReds.replace(nRed3, "<font color='red'>" + nRed3 + "</font>");
+            }
+            if (strReds.contains(nRed4)) {
+                strReds = strReds.replace(nRed4, "<font color='red'>" + nRed4 + "</font>");
+            }
+            if (strReds.contains(nRed5)) {
+                strReds = strReds.replace(nRed5, "<font color='red'>" + nRed5 + "</font>");
+            }
+            if (strReds.contains(nRed6)) {
+                strReds = strReds.replace(nRed6, "<font color='red'>" + nRed6 + "</font>");
+            }
+            lottery.setStrReds(strReds);
+        }
+        return lotteries;
     }
 
     public Long getlotteryCount() {
