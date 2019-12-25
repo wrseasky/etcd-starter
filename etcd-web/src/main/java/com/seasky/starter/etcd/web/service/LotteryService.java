@@ -105,26 +105,31 @@ public class LotteryService {
         }).start();
     }
 
-    public List<Lottery> getlotteries(String lockyNums) {
-        String[] split = lockyNums.split(",");
-        for (int i=0;i<split.length;i++) {
-            if(split[i].length()==1){
-                split[i] = "0"+split[i];
+    public List<Lottery> getlotteries(String lockyNums, String strWinNumber,String dtWinTimeStart,String dtWinTimeEnd) {
+        String[] split = null;
+        if(lockyNums != null){
+            split = lockyNums.split(",");
+            for (int i=0;i<split.length;i++) {
+                if(split[i].length()==1){
+                    split[i] = "0"+split[i];
+                }
             }
         }
 
-//        List<Lottery> lotteries = lotteryMapper.getlotteries(split);
-        List<Lottery> lotteries = lotteryMapper.getlotteries(split,"145", "2017-01-09","2019-01-16");
+        List<Lottery> lotteries = lotteryMapper.getlotteries(split,strWinNumber, dtWinTimeStart,dtWinTimeEnd);
         String prefix = "<font color='red'>";
         String suffix = "</font>";
-        for (Lottery lottery : lotteries) {
-            String strReds = lottery.getStrReds();
-            for (String red : split) {
-                if (strReds.contains(red)) {
-                    strReds = strReds.replace(red, prefix + red + suffix);
+
+        if(split != null){
+            for (Lottery lottery : lotteries) {
+                String strReds = lottery.getStrReds();
+                for (String red : split) {
+                    if (strReds.contains(red)) {
+                        strReds = strReds.replace(red, prefix + red + suffix);
+                    }
                 }
+                lottery.setStrReds(strReds);
             }
-            lottery.setStrReds(strReds);
         }
         return lotteries;
     }

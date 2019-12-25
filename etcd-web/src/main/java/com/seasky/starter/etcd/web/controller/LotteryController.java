@@ -6,6 +6,7 @@ import com.seasky.starter.etcd.web.service.LotteryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,10 +49,29 @@ public class LotteryController {
     }
 
     @RequestMapping(value = "/getlottery", method = RequestMethod.POST)
-    public String getlotteries(@RequestParam("lockyNums") String lockyNums, Model model) {
-        List<Lottery> lotteries = lotteryService.getlotteries(lockyNums);
+    public String getlotteries(@RequestParam("lockyNums") String lockyNums,
+                               @RequestParam("strWinNumber") String strWinNumber,
+                               @RequestParam("dtWinTimeStart") String dtWinTimeStart,
+                               @RequestParam("dtWinTimeEnd") String dtWinTimeEnd,
+                               Model model) {
+        if(StringUtils.isEmpty(lockyNums)){
+            lockyNums = null;
+        }
+        if(StringUtils.isEmpty(strWinNumber)){
+            strWinNumber = null;
+        }
+        if(StringUtils.isEmpty(dtWinTimeStart)){
+            dtWinTimeStart = null;
+        }
+        if(StringUtils.isEmpty(dtWinTimeEnd)){
+            dtWinTimeEnd = null;
+        }
+        List<Lottery> lotteries = lotteryService.getlotteries(lockyNums,strWinNumber,dtWinTimeStart,dtWinTimeEnd);
         model.addAttribute("lotteries", lotteries);
         model.addAttribute("lockyNums", lockyNums);
+        model.addAttribute("strWinNumber", strWinNumber);
+        model.addAttribute("dtWinTimeStart", dtWinTimeStart);
+        model.addAttribute("dtWinTimeEnd", dtWinTimeEnd);
         return "lottery/lotteryList";
     }
 

@@ -96,14 +96,14 @@
                     <div class="searchName">
                         <label>开奖期数：</label>
                         <div class="input-group">
-                            <input class="form-control" type="text" id="strBatchNum"  value=""  />
+                            <input class="form-control" type="text" id="strWinNumber" name="strWinNumber" th:value="${strWinNumber}"/>
                         </div>
                     </div>
 
                     <div class="searchName">
                         <label>开始时间：</label>
                         <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control" />
+                            <input type='text' class="form-control" name="dtWinTimeStart" th:value="${dtWinTimeStart}"/>
                             <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                              </span>
@@ -111,7 +111,7 @@
 
                         <label>结束时间：</label>
                         <div class='input-group date' id='datetimepicker2'>
-                            <input type='text' class="form-control" />
+                            <input type='text' class="form-control" name="dtWinTimeEnd" th:value="${dtWinTimeEnd}"/>
                             <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -177,9 +177,9 @@
         th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
 
 <!-- Icons -->
-<script src="asserts/js/moment.min.js"></script>
+<script src="/asserts/js/moment.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="asserts/js/moment-with-locales.min.js"></script>
+<script src="/asserts/js/moment-with-locales.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script>
     // feather.replace()
@@ -188,17 +188,16 @@
     $("#btn").click(function () {
         //为空判断
         var lockyNums = $("#lockyNums").val();
-        if (typeof lockyNums == "undefined" || lockyNums == null || lockyNums == "") {
-            alert("请输入要查询内容！");
-            return false;
+        if (typeof lockyNums !== "undefined" && lockyNums !== null && lockyNums !== "") {
+            //数字格式
+            var reg = /^(\d+[,])*(\d+)$/;
+            if (!reg.exec(lockyNums)) {
+                alert("请输入逗号分隔数字！");
+                return false;
+            }
         }
 
-        //数字格式
-        var reg = /^(\d+[,])*(\d+)$/;
-        if (!reg.exec(lockyNums)) {
-            alert("请输入逗号分隔数字！");
-            return false;
-        }
+
         //字符分割
        /* var numbers = lockyNums.split(",");
         if (numbers.length !== 6) {
