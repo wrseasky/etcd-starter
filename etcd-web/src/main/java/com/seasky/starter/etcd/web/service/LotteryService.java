@@ -2,8 +2,6 @@ package com.seasky.starter.etcd.web.service;
 
 import com.seasky.starter.etcd.web.entity.Lottery;
 import com.seasky.starter.etcd.web.mapper.LotteryMapper;
-import com.seasky.starter.etcd.web.utils.ProperUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.CountDownLatch;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class LotteryService {
@@ -114,7 +113,8 @@ public class LotteryService {
             }
         }
 
-        List<Lottery> lotteries = lotteryMapper.getlotteries(split);
+//        List<Lottery> lotteries = lotteryMapper.getlotteries(split);
+        List<Lottery> lotteries = lotteryMapper.getlotteries(split,"145", "2017-01-09","2019-01-16");
         String prefix = "<font color='red'>";
         String suffix = "</font>";
         for (Lottery lottery : lotteries) {

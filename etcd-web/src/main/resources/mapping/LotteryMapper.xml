@@ -27,20 +27,61 @@
     </select>
 
     <select id="getlotteries" resultMap="BaseResultMap">
-        select *,sum(cou) score from
-        (
-        <foreach item="item" index="key" collection="array">
-            <if test="key == 0">
-                select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
-            </if>
-            <if test="key != 0">
-                UNION ALL
-                select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
-            </if>
-        </foreach>
+        <choose>
+            <when test="strReds !=null and strReds.length > 0">
+                select *,sum(cou) score from
+                (
+                <foreach item="item" index="key" collection="strReds">
+                    <if test="key == 0">
+                        select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
+                        <where>
+                            <if test="strWinNumber != null">
+                                strWinNumber = "%"#{strWinNumber}"%"
+                            </if>
+                            <if test="dtWinTimeStart != null">
+                                AND dtWinTime > #{dtWinTimeStart}
+                            </if>
+                            <if test="dtWinTimeEnd != null">
+                                AND dtWinTime &lt; #{dtWinTimeEnd}
+                            </if>
+                        </where>
+                    </if>
+                    <if test="key != 0">
+                        UNION ALL
+                        select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
+                        <where>
+                            <if test="strWinNumber != null">
+                                strWinNumber like "%"#{strWinNumber}"%"
+                            </if>
+                            <if test="dtWinTimeStart != null">
+                                AND dtWinTime > #{dtWinTimeStart}
+                            </if>
+                            <if test="dtWinTimeEnd != null">
+                                AND dtWinTime &lt; #{dtWinTimeEnd}
+                            </if>
+                        </where>
+                    </if>
+                </foreach>
+                ) tt
+                GROUP BY lId ORDER BY score desc ,strWinNumber desc limit 30;
+            </when>
+            <otherwise>
+                select * from tblottery
+                <where>
+                    <if test="strWinNumber != null">
+                        strWinNumber like "%"#{strWinNumber}"%"
+                    </if>
+                    <if test="dtWinTimeStart != null">
+                        AND dtWinTime > #{dtWinTimeStart}
+                    </if>
+                    <if test="dtWinTimeEnd != null">
+                        AND dtWinTime &lt; #{dtWinTimeEnd}
+                    </if>
+                </where>
+                ORDER BY strWinNumber desc limit 30;
+            </otherwise>
+        </choose>
 
-        ) tt
-        GROUP BY lId ORDER BY score desc ,strWinNumber desc limit 30;
     </select>
 
     <insert id="insertLottery" parameterType="java.util.List" useGeneratedKeys="true">

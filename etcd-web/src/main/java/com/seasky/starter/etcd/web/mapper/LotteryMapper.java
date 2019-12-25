@@ -14,7 +14,9 @@ public interface LotteryMapper {
 
     String getlotteryByWinNumber(String strWinNumber);
 
-    public List<Lottery> getlotteries(String[] strReds);
+    public List<Lottery> getlotteries(@Param("strReds") String[] strReds,
+                                      @Param("strWinNumber")String strWinNumber,
+                                      @Param("dtWinTimeStart")String dtWinTimeStart, @Param("dtWinTimeEnd")String dtWinTimeEnd);
 
     public Long getlotteryCount();
 

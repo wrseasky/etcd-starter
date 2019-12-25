@@ -14,7 +14,7 @@ public interface UserMapper {
     public int deleteUserById(Integer id);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into user(user_name,password,date) values(#{userName},#{userName},now())")
+    @Insert("insert into user(user_name,password,date) values(#{userName},#{password},now())")
     public int insertUser(User user);
 
     @Update("update user set user_name=#{userName} where id=#{id}")
