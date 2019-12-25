@@ -148,7 +148,8 @@
                         <td th:utext="${lottery.strReds}"></td>
                         <td th:text="${lottery.nBlue}"></td>
                         <td th:text="${lottery.score}"></td>
-                        <td th:text="${#dates.format(lottery.dtWinTime, 'yyyy-MM-dd')}"></td>
+                        <!--<td th:text="${#dates.format(lottery.strWinTime, 'yyyy-MM-dd')}"></td>-->
+                        <td th:text="${lottery.strWinTime}"></td>
                     </tr>
                     </tbody>
                 </table>

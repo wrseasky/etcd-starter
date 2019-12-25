@@ -35,14 +35,15 @@
                     <if test="key == 0">
                         select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
                         <where>
+                            find_in_set(#{item},strReds)>0
                             <if test="strWinNumber != null">
-                                strWinNumber = "%"#{strWinNumber}"%"
+                                AND strWinNumber = "%"#{strWinNumber}"%"
                             </if>
                             <if test="dtWinTimeStart != null">
-                                AND dtWinTime > #{dtWinTimeStart}
+                                AND dtWinTime >= #{dtWinTimeStart}
                             </if>
                             <if test="dtWinTimeEnd != null">
-                                AND dtWinTime &lt; #{dtWinTimeEnd}
+                                AND dtWinTime &lt;= #{dtWinTimeEnd}
                             </if>
                         </where>
                     </if>
@@ -50,14 +51,15 @@
                         UNION ALL
                         select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
                         <where>
+                            find_in_set(#{item},strReds)>0
                             <if test="strWinNumber != null">
-                                strWinNumber like "%"#{strWinNumber}"%"
+                                AND strWinNumber like "%"#{strWinNumber}"%"
                             </if>
                             <if test="dtWinTimeStart != null">
-                                AND dtWinTime > #{dtWinTimeStart}
+                                AND dtWinTime >= #{dtWinTimeStart}
                             </if>
                             <if test="dtWinTimeEnd != null">
-                                AND dtWinTime &lt; #{dtWinTimeEnd}
+                                AND dtWinTime &lt;= #{dtWinTimeEnd}
                             </if>
                         </where>
                     </if>
@@ -72,10 +74,10 @@
                         strWinNumber like "%"#{strWinNumber}"%"
                     </if>
                     <if test="dtWinTimeStart != null">
-                        AND dtWinTime > #{dtWinTimeStart}
+                        AND dtWinTime >= #{dtWinTimeStart}
                     </if>
                     <if test="dtWinTimeEnd != null">
-                        AND dtWinTime &lt; #{dtWinTimeEnd}
+                        AND dtWinTime &lt;= #{dtWinTimeEnd}
                     </if>
                 </where>
                 ORDER BY strWinNumber desc limit 30;
