@@ -94,6 +94,7 @@ public class LotteryService {
                         lotteries.add(lottery);
                     }
                     originFile.delete();
+                    logger.info("-----------待保存数据数量: " + lotteries.size());
                     if (lotteries.isEmpty())
                         return;
                     lotteryMapper.insertLottery(lotteries);
