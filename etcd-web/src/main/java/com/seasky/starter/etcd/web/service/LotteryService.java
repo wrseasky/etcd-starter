@@ -108,6 +108,11 @@ public class LotteryService {
 
     public List<Lottery> getlotteries(String lockyNums) {
         String[] split = lockyNums.split(",");
+        for (int i=0;i<split.length;i++) {
+            if(split[i].length()==1){
+                split[i] = "0"+split[i];
+            }
+        }
 
         List<Lottery> lotteries = lotteryMapper.getlotteries(split);
         String prefix = "<font color='red'>";
