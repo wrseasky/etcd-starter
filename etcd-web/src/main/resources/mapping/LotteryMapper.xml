@@ -5,7 +5,7 @@
     <resultMap id="BaseResultMap" type="com.seasky.starter.etcd.web.entity.Lottery">
         <result column="lId" jdbcType="BIGINT" property="lId"/>
         <result column="strWinNumber" jdbcType="VARCHAR" property="strWinNumber"/>
-        <result column="dtWinTime" jdbcType="DATE" property="dtWinTime"/>
+        <result column="dtWinTime" jdbcType="VARCHAR" property="strWinTime"/>
         <result column="nRed1" jdbcType="INTEGER" property="nRed1"/>
         <result column="nRed2" jdbcType="INTEGER" property="nRed2"/>
         <result column="nRed3" jdbcType="INTEGER" property="nRed3"/>
@@ -91,7 +91,7 @@
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.strWinNumber},
-            #{item.dtWinTime},
+            #{item.strWinTime},
             #{item.nRed1},
             #{item.nRed2},
             #{item.nRed3},
