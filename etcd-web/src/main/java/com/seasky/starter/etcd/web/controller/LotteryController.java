@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -38,16 +39,11 @@ public class LotteryController {
     }
 
     @RequestMapping(value = "/lotteryUpload", method = RequestMethod.POST)
-    public String uploadLotteryFile(@RequestParam("file") MultipartFile file) {
+    public String uploadLotteryFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if (file.isEmpty()) {
             return "上传失败，请选择文件";
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                lotteryService.uploadLoterryFile(file);
-            }
-        }).start();
+        lotteryService.uploadLoterryFile(file,request);
         return "redirect:/lottery/toLotteryUpload";
     }
 
@@ -69,7 +65,7 @@ public class LotteryController {
     public String getlotteryCount(Model model) {
         Long lotteryCount = lotteryService.getlotteryCount();
         model.addAttribute("lotteryCount", lotteryCount);
-        return "" +lotteryCount;
+        return "" + lotteryCount;
     }
 
 }

@@ -18,28 +18,27 @@
         <result column="score" jdbcType="INTEGER" property="score"/>
     </resultMap>
 
-    <select id="getlotteryByWinNumber" resultType="com.seasky.starter.etcd.web.entity.Lottery">
-        select * from tblottery where strWinNumber=#{strWinNumber}
+    <select id="getlotteryByWinNumber" resultType="java.lang.String">
+        select strWinNumber from tblottery where strWinNumber=#{strWinNumber}
     </select>
 
-    <select id="getlotteryCount" resultType="long">
+    <select id="getlotteryCount" resultType="java.lang.Long">
         select count(1) from tblottery
     </select>
 
     <select id="getlotteries" resultMap="BaseResultMap">
         select *,sum(cou) score from
         (
-            select *,CASE WHEN find_in_set(#{nRed1},strReds)>0 then 1  else 0 end cou from tblottery
-            UNION ALL
-            select *,CASE WHEN find_in_set(#{nRed2},strReds)>0 then 1  else 0 end cou from tblottery
-            UNION ALL
-            select *,CASE WHEN find_in_set(#{nRed3},strReds)>0 then 1  else 0 end cou from tblottery
-            UNION ALL
-            select *,CASE WHEN find_in_set(#{nRed4},strReds)>0 then 1  else 0 end cou from tblottery
-            UNION ALL
-            select *,CASE WHEN find_in_set(#{nRed5},strReds)>0 then 1  else 0 end cou from tblottery
-            UNION ALL
-            select *,CASE WHEN find_in_set(#{nRed6},strReds)>0 then 1  else 0 end cou from tblottery
+        <foreach item="item" index="key" collection="array">
+            <if test="key == 0">
+                select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
+            </if>
+            <if test="key != 0">
+                UNION ALL
+                select *,CASE WHEN find_in_set(#{item},strReds)>0 then 1  else 0 end cou from tblottery
+            </if>
+        </foreach>
+
         ) tt
         GROUP BY lId ORDER BY score desc ,strWinNumber desc limit 30;
     </select>

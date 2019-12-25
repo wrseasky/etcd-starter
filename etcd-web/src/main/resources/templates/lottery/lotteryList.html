@@ -78,7 +78,7 @@
             <form class="form-signin" th:action="@{/lottery/getlottery}" method="post">
                 <!--判断-->
                 <input type="text" name="lockyNums" id="lockyNums" th:value="${lockyNums}"
-                       class="form-control" placeholder="输入逗号分隔的6位红号" required="" autofocus="">
+                       class="form-control" placeholder="输入逗号分隔的红号" required="" autofocus="">
                 <button class="btn btn-lg btn-primary btn-block" id="btn" type="submit">查询</button>
             </form>
 
@@ -140,13 +140,12 @@
             alert("请输入逗号分隔数字！");
             return false;
         }
-
         //字符分割
-        var numbers = lockyNums.split(",");
+       /* var numbers = lockyNums.split(",");
         if (numbers.length !== 6) {
             alert("字符串长度有误！");
             return false;
-        }
+        }*/
         return true;
     });
 </script>
