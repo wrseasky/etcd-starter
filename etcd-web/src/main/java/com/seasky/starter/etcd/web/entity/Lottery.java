@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Lottery {
     private Long lId;
     private String strWinNumber;
-    private Date dtWinTime;
+    private String strWinTime;
     private Integer nRed1;
     private Integer nRed2;
     private Integer nRed3;
@@ -34,7 +34,7 @@ public class Lottery {
         return "Lottery{" +
                 "lId=" + lId +
                 ", strWinNumber='" + strWinNumber + '\'' +
-                ", dtWinTime=" + dtWinTime +
+                ", strWinTime=" + strWinTime +
                 ", nRed1=" + nRed1 +
                 ", nRed2=" + nRed2 +
                 ", nRed3=" + nRed3 +
@@ -55,7 +55,7 @@ public class Lottery {
         Lottery lottery = (Lottery) o;
         return Objects.equals(lId, lottery.lId) &&
                 Objects.equals(strWinNumber, lottery.strWinNumber) &&
-                Objects.equals(dtWinTime, lottery.dtWinTime) &&
+                Objects.equals(strWinTime, lottery.strWinTime) &&
                 Objects.equals(nRed1, lottery.nRed1) &&
                 Objects.equals(nRed2, lottery.nRed2) &&
                 Objects.equals(nRed3, lottery.nRed3) &&
@@ -71,7 +71,7 @@ public class Lottery {
     @Override
     public int hashCode() {
 
-        return Objects.hash(lId, strWinNumber, dtWinTime, nRed1, nRed2, nRed3, nRed4, nRed5, nRed6, strReds, nBlue, dtCreateTime, score);
+        return Objects.hash(lId, strWinNumber, strWinTime, nRed1, nRed2, nRed3, nRed4, nRed5, nRed6, strReds, nBlue, dtCreateTime, score);
     }
 
     public Long getlId() {
@@ -91,12 +91,12 @@ public class Lottery {
         this.strWinNumber = strWinNumber;
     }
 
-    public Date getDtWinTime() {
-        return dtWinTime;
+    public String getStrWinTime() {
+        return strWinTime;
     }
 
-    public void setDtWinTime(Date dtWinTime) {
-        this.dtWinTime = dtWinTime;
+    public void setStrWinTime(String strWinTime) {
+        this.strWinTime = strWinTime;
     }
 
     public Integer getnRed1() {

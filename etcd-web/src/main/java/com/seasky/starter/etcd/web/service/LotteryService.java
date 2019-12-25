@@ -48,7 +48,6 @@ public class LotteryService {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(originFile), "UTF-8"));
                     List<Lottery> lotteries = new ArrayList<>();
                     String result = "";
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
                     int line = 0;
                     Lottery lottery = null;
@@ -65,8 +64,7 @@ public class LotteryService {
                         lottery.setStrWinNumber(strWinNumber);
 
                         String strWinTime = split[2];
-                        Date dtWinTime = sdf.parse(strWinTime);
-                        lottery.setDtWinTime(dtWinTime);
+                        lottery.setStrWinTime(strWinTime);
 
                         String redsBlues = split[3];
                         String[] redBlue = redsBlues.split("\\\\");
