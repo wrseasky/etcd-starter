@@ -49,7 +49,7 @@ public class LotteryService {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(originFile), "UTF-8"));
                     List<Lottery> lotteries = new ArrayList<>();
                     String result = "";
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
                     int line = 0;
                     Lottery lottery = null;
@@ -108,35 +108,16 @@ public class LotteryService {
 
     public List<Lottery> getlotteries(String lockyNums) {
         String[] split = lockyNums.split(",");
-        String nRed1 = split[0];
-        String nRed2 = split[1];
-        String nRed3 = split[2];
-        String nRed4 = split[3];
-        String nRed5 = split[4];
-        String nRed6 = split[5];
 
         List<Lottery> lotteries = lotteryMapper.getlotteries(split);
         String prefix = "<font color='red'>";
         String suffix = "</font>";
         for (Lottery lottery : lotteries) {
             String strReds = lottery.getStrReds();
-            if (strReds.contains(nRed1)) {
-                strReds = strReds.replace(nRed1, prefix + nRed1 + suffix);
-            }
-            if (strReds.contains(nRed2)) {
-                strReds = strReds.replace(nRed2, prefix + nRed2 + suffix);
-            }
-            if (strReds.contains(nRed3)) {
-                strReds = strReds.replace(nRed3, prefix + nRed3 + suffix);
-            }
-            if (strReds.contains(nRed4)) {
-                strReds = strReds.replace(nRed4, prefix + nRed4 + suffix);
-            }
-            if (strReds.contains(nRed5)) {
-                strReds = strReds.replace(nRed5, prefix + nRed5 + suffix);
-            }
-            if (strReds.contains(nRed6)) {
-                strReds = strReds.replace(nRed6, prefix + nRed6 + suffix);
+            for (String red : split) {
+                if (strReds.contains(red)) {
+                    strReds = strReds.replace(red, prefix + red + suffix);
+                }
             }
             lottery.setStrReds(strReds);
         }
