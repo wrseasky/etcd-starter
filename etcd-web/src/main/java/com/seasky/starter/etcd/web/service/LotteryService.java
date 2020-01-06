@@ -41,9 +41,9 @@ public class LotteryService {
             logger.error(e.toString());
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(originFile), "UTF-8"));
                     List<Lottery> lotteries = new ArrayList<>();
@@ -99,8 +99,8 @@ public class LotteryService {
                 } catch (Exception e) {
                     logger.error(e.toString());
                 }
-            }
-        }).start();
+//            }
+//        }).start();
     }
 
     public List<Lottery> getlotteries(String lockyNums, String strWinNumber,String dtWinTimeStart,String dtWinTimeEnd) {
