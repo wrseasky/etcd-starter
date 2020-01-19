@@ -40,11 +40,11 @@ public class LotteryController {
     }
 
     @RequestMapping(value = "/lotteryUpload", method = RequestMethod.POST)
-    public String uploadLotteryFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public String uploadLotteryFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return "上传失败，请选择文件";
         }
-        lotteryService.uploadLoterryFile(file,request);
+        lotteryService.uploadLoterryFile(file);
         return "redirect:/lottery/toLotteryUpload";
     }
 
