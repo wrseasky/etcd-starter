@@ -28,11 +28,8 @@ public class LotteryService {
     public void uploadLoterryFile(MultipartFile file) {
 
         try {
-            File originFolder = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "\\uploadFiles\\");
-            File originFile = new File(originFolder, Objects.requireNonNull(file.getOriginalFilename()));
-            file.transferTo(originFile);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(originFile), "UTF-8"));
+            InputStream inputStream = file.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             List<Lottery> lotteries = new ArrayList<>();
             String result = "";
 
@@ -77,7 +74,6 @@ public class LotteryService {
                 lottery.setnBlue(blue);
                 lotteries.add(lottery);
             }
-            originFile.delete();
             logger.info("-----------待保存数据数量: " + lotteries.size());
             if (lotteries.isEmpty())
                 return;
